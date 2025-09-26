@@ -1,9 +1,35 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { ThemeToggle } from "@/components/theme-toggle"
+import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { usePuterStore } from "@/lib/puter";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export function Footer() {
+  // const { isLoading, auth } = usePuterStore();
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  // const next = searchParams.get("next") || "/";
+
+  // console.log("Footer searchParams:", searchParams);
+  // console.log("Footer nezt:", next);
+
+  const pathname = usePathname();
+  const router = useRouter();
+  const { auth } = usePuterStore();
+
+  console.log("Footer pathname:", pathname);
+
+  const handleAuthClick = async () => {
+    if (auth.isAuthenticated) {
+      await auth.signOut();
+      router.push("/home");
+    } else {
+      await auth.signIn();
+      router.push(pathname);
+    }
+  };
+
   return (
     <footer className="border-t border-border/50 mt-16">
       <div className="mx-auto max-w-6xl px-4 py-8">
@@ -11,11 +37,14 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/home" className="font-semibold text-pretty">
-              <span className="text-foreground">ATS</span>
-              <span className="ml-1 rounded-md bg-primary px-2 py-0.5 text-sm text-primary-foreground">AI</span>
+              <span className="text-foreground">ATSify</span>
+              <span className="ml-1 rounded-md bg-primary px-2 py-0.5 text-sm text-primary-foreground">
+                AI
+              </span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs">
-              AI-powered resume analysis and ATS optimization to help you land your dream job.
+              AI-powered resume analysis and ATS optimization to help you land
+              your dream job.
             </p>
           </div>
 
@@ -24,18 +53,28 @@ export function Footer() {
             <h3 className="font-medium text-foreground">Product</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/upload" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="/upload"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Upload Resume
                 </Link>
               </li>
               <li>
-                <Link href="/home" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  href="/home"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/auth" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Sign In
+                <Link
+                  href={auth.isAuthenticated ? `/auth?next=/` : `/auth?next=${pathname}`}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={handleAuthClick}
+                >
+                  {auth.isAuthenticated ? "Sign Out" : "Sign In"}
                 </Link>
               </li>
             </ul>
@@ -46,17 +85,26 @@ export function Footer() {
             <h3 className="font-medium text-foreground">Resources</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
                   Terms of Service
                 </a>
               </li>
@@ -74,7 +122,9 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border/50 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">© 2025 ATS AI. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">
+            © 2025 ATSify AI. All rights reserved.
+          </p>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">
               Contact
@@ -86,5 +136,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

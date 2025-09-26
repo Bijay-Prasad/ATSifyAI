@@ -39,7 +39,7 @@ export function AuthForm({
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+          {/* <CardContent className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -76,7 +76,7 @@ export function AuthForm({
               </a>
             </div>
             <Separator />
-          </CardContent>
+          </CardContent> */}
           <CardFooter className="flex flex-col gap-2">
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Signing in..." : "Sign in"}

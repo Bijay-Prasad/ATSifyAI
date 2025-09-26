@@ -1,16 +1,59 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { ResumeCard } from "@/components/resume-card"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion";
+import { ResumeCard } from "@/components/resume-card";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { usePuterStore } from "@/lib/puter";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const items = [
-    { title: "Resume - Product Manager", score: 82, role: "Product Manager", date: "Sep 2025" },
-    { title: "Resume - Frontend Dev", score: 67, role: "Frontend Developer", date: "Sep 2025" },
-    { title: "Resume - Data Analyst", score: 54, role: "Data Analyst", date: "Aug 2025" },
-  ]
+    {
+      title: "Resume - Product Manager",
+      score: 82,
+      role: "Product Manager",
+      date: "Sep 2025",
+    },
+    {
+      title: "Resume - Frontend Dev",
+      score: 67,
+      role: "Frontend Developer",
+      date: "Sep 2025",
+    },
+    {
+      title: "Resume - Data Analyst",
+      score: 54,
+      role: "Data Analyst",
+      date: "Aug 2025",
+    },
+  ];
+
+  const { auth, kv } = usePuterStore();
+  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [loadingResumes, setLoadingResumes] = useState(false);
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      const loadResumes = async () => {
+        setLoadingResumes(true);
+
+        const resumes = (await kv.list("resume:*", true)) as KVItem[];
+
+        const parsedResumes = resumes?.map(
+          (resume) => JSON.parse(resume.value) as Resume
+        );
+
+        setResumes(parsedResumes || []);
+        setLoadingResumes(false);
+      };
+
+      loadResumes();
+    }
+  }, []);
+
+  console.log({ resumes, loadingResumes });
 
   return (
     <div className="space-y-8">
@@ -30,8 +73,8 @@ export default function HomePage() {
             transition={{ delay: 0.1 }}
             className="max-w-prose text-pretty text-muted-foreground"
           >
-            See previously analyzed resumes, scores, and tips—all in one place. Continue improving or start a new
-            upload.
+            See previously analyzed resumes, scores, and tips—all in one place.
+            Continue improving or start a new upload.
           </motion.p>
           <div className="flex gap-3">
             <Link href="/upload" className="cursor-pointer">
@@ -54,5 +97,5 @@ export default function HomePage() {
         </motion.div>
       </section>
     </div>
-  )
+  );
 }
