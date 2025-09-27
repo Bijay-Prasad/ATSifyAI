@@ -6,25 +6,26 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { usePuterStore } from "@/lib/puter";
+import { Loader2 } from "lucide-react";
 
 export default function HomePage() {
   const items = [
     {
-      title: "Resume - Product Manager",
+      title: "Google",
       score: 82,
       role: "Product Manager",
       date: "Sep 2025",
     },
     {
-      title: "Resume - Frontend Dev",
+      title: "Microsoft",
       score: 67,
-      role: "Frontend Developer",
+      role: "Software Engineer",
       date: "Sep 2025",
     },
     {
-      title: "Resume - Data Analyst",
+      title: "Apple",
       score: 54,
-      role: "Data Analyst",
+      role: "iOS Developer",
       date: "Aug 2025",
     },
   ];
@@ -39,9 +40,13 @@ export default function HomePage() {
 
         const resumes = (await kv.list("resume:*", true)) as KVItem[];
 
+        // console.log("Raw resumes from KV:", resumes);
+
         const parsedResumes = resumes?.map(
           (resume) => JSON.parse(resume.value) as Resume
         );
+
+        // console.log("Loaded resumes from KV:", { resumes, parsedResumes });
 
         setResumes(parsedResumes || []);
         setLoadingResumes(false);
@@ -49,13 +54,13 @@ export default function HomePage() {
 
       loadResumes();
     }
-  }, []);
+  }, [auth.isAuthenticated]);
 
   console.log({ resumes, loadingResumes });
 
   return (
-    <div className="space-y-8">
-      <section className="grid items-center gap-6 md:grid-cols-2">
+    <div className="space-y-8 md:min-h-[39vh] ">
+      <section className="grid items-center gap-6 md:grid-cols-2 ">
         <div className="space-y-4">
           <motion.h1
             initial={{ opacity: 0, y: 10 }}
@@ -91,9 +96,23 @@ export default function HomePage() {
           transition={{ duration: 0.45 }}
           className="grid grid-cols-1 gap-4 md:grid-cols-2"
         >
-          {items.map((it, i) => (
-            <ResumeCard key={it.title} {...it} />
-          ))}
+          {auth.isAuthenticated && loadingResumes ? (
+            <div className="flex items-center justify-center">
+              <Loader2 className="h-4 w-4 animate-spin" />
+            </div>
+          ) : auth.isAuthenticated && resumes.length > 0 ? (
+            resumes.map((it, i) => (
+              <ResumeCard
+                key={it.id}
+                title={it.companyName || ""}
+                score={it.feedback.overallScore}
+                role={it.jobTitle || ""}
+                date="Sep 2025"
+              />
+            ))
+          ) : (
+            items.map((it, i) => <ResumeCard key={it.title} {...it} />)
+          )}
         </motion.div>
       </section>
     </div>

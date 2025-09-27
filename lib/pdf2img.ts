@@ -17,6 +17,7 @@ async function loadPdfJs(): Promise<any> {
   loadPromise = import("pdfjs-dist/build/pdf.mjs").then((lib) => {
     // Set the worker source to use local file
     lib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+    // lib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.3.93/build/pdf.worker.min.mjs";
     pdfjsLib = lib;
     isLoading = false;
     return lib;

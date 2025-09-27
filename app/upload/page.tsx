@@ -19,9 +19,12 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { usePuterStore } from "@/lib/puter";
 import { useRouter } from "next/navigation";
+import { convertPdfToImage } from "@/lib/pdf2img";
+import { generateUUID } from "@/lib/utils";
+import { prepareInstructions } from "@/constants";
 
 export default function UploadPage() {
-  const { auth } = usePuterStore();
+  const { auth, isLoading, fs, ai, kv } = usePuterStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -29,18 +32,98 @@ export default function UploadPage() {
   }, [auth.isAuthenticated]);
 
   const [loading, setLoading] = useState(false);
-  const [job, setJob] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [statusText, setStatusText] = useState("");
 
-  async function handleAnalyze(e: React.FormEvent) {
+
+
+  // async function handleAnalyze(e: React.FormEvent) {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     console.log("[v0] Analyze submit:", { company, jobTitle, jobDescription, file });
+  //     setCompany("");
+  //     setJobTitle("");
+  //     setJobDescription("");
+  //     setFile(null);
+  //     setLoading(false);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  const handleAnalyze = async ({
+    companyName,
+    jobTitle,
+    jobDescription,
+    file,
+  }: {
+    companyName: string;
+    jobTitle: string;
+    jobDescription: string;
+    file: File;
+  }) => {
+    setIsProcessing(true);
+
+    setStatusText("Uploading the file...");
+    const uploadedFile = await fs.upload([file]);
+    if (!uploadedFile) return setStatusText("Error: Failed to upload file");
+
+    setStatusText("Converting to image...");
+    const imageFile = await convertPdfToImage(file);
+    console.log(imageFile);
+    if (!imageFile.file)
+      return setStatusText("Error: Failed to convert PDF to image");
+
+    setStatusText("Uploading the image...");
+    const uploadedImage = await fs.upload([imageFile.file]);
+    if (!uploadedImage) return setStatusText("Error: Failed to upload image");
+
+    setStatusText("Preparing data...");
+    const uuid = generateUUID();
+    const data = {
+      id: uuid,
+      resumePath: uploadedFile.path,
+      imagePath: uploadedImage.path,
+      companyName,
+      jobTitle,
+      jobDescription,
+      feedback: "",
+    };
+    await kv.set(`resume:${uuid}`, JSON.stringify(data));
+
+    setStatusText("Analyzing...");
+
+    const feedback = await ai.feedback(
+      uploadedFile.path,
+      prepareInstructions({ jobTitle, jobDescription })
+    );
+    if (!feedback) return setStatusText("Error: Failed to analyze resume");
+
+    const feedbackText =
+      typeof feedback.message.content === "string"
+        ? feedback.message.content
+        : feedback.message.content[0].text;
+
+    data.feedback = JSON.parse(feedbackText);
+    await kv.set(`resume:${uuid}`, JSON.stringify(data));
+    setStatusText("Analysis complete, redirecting...");
+    console.log(data);
+    router.push(`/review/${uuid}`);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      // console.log("[v0] Analyze submit:", { job, file })
-    } finally {
-      setLoading(false);
-    }
-  }
+
+    if (!file) return;
+
+    handleAnalyze({ companyName, jobTitle, jobDescription, file });
+    console.log({ companyName, jobTitle, jobDescription, file });
+  };
 
   return (
     <motion.div
@@ -56,16 +139,38 @@ export default function UploadPage() {
             tailored suggestions.
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleAnalyze}>
+        <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor="job">Job description</Label>
+              <Label htmlFor="company-name">Company Name</Label>
+              <Input
+                id="company-name"
+                placeholder="Company name..."
+                type="text"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="job-title">Job Title</Label>
+              <Input
+                id="job-title"
+                placeholder="Job title..."
+                type="text"
+                value={jobTitle}
+                onChange={(e) => setJobTitle(e.target.value)}
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="job-description">Job description</Label>
               <Textarea
-                id="job"
+                id="job-description"
                 placeholder="Paste the role’s responsibilities, requirements, and key skills..."
                 className="min-h-40"
-                value={job}
-                onChange={(e) => setJob(e.target.value)}
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
                 required
               />
             </div>
