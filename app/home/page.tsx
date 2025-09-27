@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { usePuterStore } from "@/lib/puter";
-import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const items = [
@@ -33,7 +32,6 @@ export default function HomePage() {
   const { auth, kv } = usePuterStore();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loadingResumes, setLoadingResumes] = useState(false);
-
   useEffect(() => {
     if (auth.isAuthenticated) {
       const loadResumes = async () => {
@@ -80,9 +78,11 @@ export default function HomePage() {
             <Link href="/upload" className="cursor-pointer">
               <Button>Upload new resume</Button>
             </Link>
-            <Link href="/auth">
-              <Button variant="outline">Sign in</Button>
-            </Link>
+            {!auth.isAuthenticated && (
+              <Link href="/auth">
+                <Button variant="outline">Sign in</Button>
+              </Link>
+            )}
           </div>
         </div>
         <motion.div
