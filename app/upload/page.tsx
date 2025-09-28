@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -24,32 +23,15 @@ import { generateUUID } from "@/lib/utils";
 import { prepareInstructions } from "@/constants";
 import { MultiStepLoader } from "@/components/ui/multi-step-loader";
 
-// const loadingStates = [
-//   {
-//     text: "Buying a condo",
-//   },
-//   {
-//     text: "Travelling in a flight",
-//   },
-//   {
-//     text: "Meeting Tyler Durden",
-//   },
-//   {
-//     text: "He makes soap",
-//   },
-//   {
-//     text: "We goto a bar",
-//   },
-//   {
-//     text: "Start a fight",
-//   },
-//   {
-//     text: "We like it",
-//   },
-//   {
-//     text: "Welcome to F**** C***",
-//   },
-// ];
+
+const loadingStates = [
+  { text: "Uploading the file..." },
+  { text: "Converting to image..." },
+  { text: "Uploading the image..." },
+  { text: "Preparing data..." },
+  { text: "Analyzing..." },
+  { text: "Analysis complete, redirecting..." }
+];
 
 export default function UploadPage() {
   const { auth, isLoading, fs, ai, kv } = usePuterStore();
@@ -65,48 +47,13 @@ export default function UploadPage() {
   const [jobDescription, setJobDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [loadingStates, setLoadingStates] = useState<{ text: string }[]>([]);
   const [statusText, setStatusText] = useState("");
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
-  // useEffect(() => {
-  //   setLoadingStates(loadingStates.map((state, idx) =>
-  //     idx === currentStepIndex ? { ...state, text: statusText } : state
-  //   ));
-  // }, [currentStepIndex]);
-
-  // useEffect(() => {
-  //   setLoadingStates(loadingStates.map((state, idx) =>
-  //     idx === currentStepIndex ? { ...state, text: statusText } : state
-  //   ));
-  // }, [statusText]);
-
-  // useEffect(() => {
-  //   setLoadingStates(loadingStates.map((state, idx) =>
-  //     idx === currentStepIndex ? { ...state, text: statusText } : state
-  //   ));
-  // }, [loadingStates]);
-
-  const pushStatus = (text: string) => {
-    setStatusText(text);
-    setLoadingStates((prev) => [...prev, { text }]);
-    setCurrentStepIndex((prev) => prev + 1);
-  };
-
-  // async function handleAnalyze(e: React.FormEvent) {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     console.log("[v0] Analyze submit:", { company, jobTitle, jobDescription, file });
-  //     setCompany("");
-  //     setJobTitle("");
-  //     setJobDescription("");
-  //     setFile(null);
-  //     setLoading(false);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+  useEffect(() => {
+    const idx = loadingStates.findIndex(state => state.text === statusText);
+    if (idx !== -1) setCurrentStepIndex(idx);
+  }, [statusText]);
 
   const handleAnalyze = async ({
     companyName,
@@ -120,28 +67,22 @@ export default function UploadPage() {
     file: File;
   }) => {
     setIsProcessing(true);
-    setLoadingStates([]);
     setCurrentStepIndex(0);
 
-    pushStatus("Uploading the file...");
-    // setStatusText("Uploading the file...");
+    setStatusText("Uploading the file...");
     const uploadedFile = await fs.upload([file]);
     if (!uploadedFile) return setStatusText("Error: Failed to upload file");
 
-    // setStatusText("Converting to image...");
-    pushStatus("Converting to image...");
+    setStatusText("Converting to image...");
     const imageFile = await convertPdfToImage(file);
-    console.log(imageFile);
     if (!imageFile.file)
       return setStatusText("Error: Failed to convert PDF to image");
 
-    // setStatusText("Uploading the image...");
-    pushStatus("Uploading the image...");
+    setStatusText("Uploading the image...");
     const uploadedImage = await fs.upload([imageFile.file]);
     if (!uploadedImage) return setStatusText("Error: Failed to upload image");
 
-    // setStatusText("Preparing data...");
-    pushStatus("Preparing data...");
+    setStatusText("Preparing data...");
     const uuid = generateUUID();
     const data = {
       id: uuid,
@@ -154,9 +95,7 @@ export default function UploadPage() {
     };
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
 
-    // setStatusText("Analyzing...");
-    pushStatus("Analyzing...");
-
+    setStatusText("Analyzing...");
     const feedback = await ai.feedback(
       uploadedFile.path,
       prepareInstructions({ jobTitle, jobDescription })
@@ -170,11 +109,7 @@ export default function UploadPage() {
 
     data.feedback = JSON.parse(feedbackText);
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
-    // setStatusText("Analysis complete, redirecting...");
-    pushStatus("Analysis complete, redirecting...");
-    // setCurrentStepIndex(5);
-    console.log(data);
-    // Wait 2 seconds before redirecting
+    setStatusText("Analysis complete, redirecting...");
     setTimeout(() => {
       router.push(`/review/${uuid}`);
     }, 2000);
@@ -196,20 +131,12 @@ export default function UploadPage() {
       transition={{ duration: 0.4 }}
     >
       {isProcessing ? (
-        // <>
-        //   <h1>Smart feedback for your dream job</h1>
-        //   <h2>{statusText}</h2>
-        //   {/* <img src="/images/resume-scan.gif" className="w-full" /> */}
-        // </>
-        // <MultiStepLoader loadingStates={loadingStates.map((state, idx) =>
-        //   idx === currentStepIndex ? { ...state, text: statusText } : state
-        // )} loading={isProcessing} duration={2000} loop={false}/>
         <MultiStepLoader
           loadingStates={loadingStates}
           loading={isProcessing}
           duration={2000}
           loop={false}
-          value={currentStepIndex - 1}
+          value={currentStepIndex}
         />
       ) : (
         <Card className="mx-auto w-full max-w-2xl">
