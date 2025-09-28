@@ -49,10 +49,22 @@ export default function UploadPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const idx = loadingStates.findIndex(state => state.text === statusText);
-    if (idx !== -1) setCurrentStepIndex(idx);
+    if (idx !== -1) {
+      setCurrentStepIndex(idx);
+      setError("");
+    } else if (statusText && statusText.startsWith("Error:")) {
+      setError(statusText);
+      setTimeout(() => {
+        setError("");
+        setIsProcessing(false);
+        setStatusText("");
+        router.push("/upload");
+      }, 3000);
+    }
   }, [statusText]);
 
   const handleAnalyze = async ({
@@ -131,13 +143,20 @@ export default function UploadPage() {
       transition={{ duration: 0.4 }}
     >
       {isProcessing ? (
-        <MultiStepLoader
-          loadingStates={loadingStates}
-          loading={isProcessing}
-          duration={2000}
-          loop={false}
-          value={currentStepIndex}
-        />
+        error ? (
+          <div className="flex flex-col items-center justify-center h-96">
+            <div className="text-red-600 dark:text-red-400 text-lg font-semibold mb-4">{error}</div>
+            <div className="text-sm text-muted-foreground">Redirecting to upload page...</div>
+          </div>
+        ) : (
+          <MultiStepLoader
+            loadingStates={loadingStates}
+            loading={isProcessing}
+            duration={2000}
+            loop={false}
+            value={currentStepIndex}
+          />
+        )
       ) : (
         <Card className="mx-auto w-full max-w-2xl">
           <CardHeader>
