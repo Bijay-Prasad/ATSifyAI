@@ -112,14 +112,34 @@ export default function UploadPage() {
       uploadedFile.path,
       prepareInstructions({ jobTitle, jobDescription })
     );
-    if (!feedback) return setStatusText("Error: Failed to analyze resume");
+    if (!feedback) {
+      return setError("Error: Failed to analyze resume");
+    }
+    if (
+      typeof feedback === "object" &&
+      feedback !== null &&
+      "code" in feedback &&
+      (feedback as any).code === "error_400_from_delegate"
+    ) {
+      return setError("Error: AI usage limit exceeded. Please try again later or upgrade your plan.");
+    }
 
-    const feedbackText =
-      typeof feedback.message.content === "string"
-        ? feedback.message.content
-        : feedback.message.content[0].text;
+    let feedbackText;
+    if (typeof feedback.message.content === "string") {
+      feedbackText = feedback.message.content;
+    } else if (Array.isArray(feedback.message.content) && feedback.message.content[0]?.text) {
+      feedbackText = feedback.message.content[0].text;
+    } else {
+      return setError("Error: Invalid feedback format received");
+    }
 
-    data.feedback = JSON.parse(feedbackText);
+    try {
+      data.feedback = JSON.parse(feedbackText);
+    } catch (parseError) {
+      console.error("JSON Parse Error:", parseError);
+      console.error("Raw feedback text:", feedbackText);
+      return setError("Error: Failed to parse AI feedback. Please try again.");
+    }
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
     setStatusText("Analysis complete, redirecting...");
     setTimeout(() => {

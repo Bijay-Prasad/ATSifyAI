@@ -19,14 +19,18 @@ interface Feedback {
   ATS: {
     score: number;
     tips: {
-      type: "good" | "improve";
+      type: "good" | "warning" | "bad";
       tip: string;
     }[];
+    keywordRelevance: string;
+    skillsDetected: string;
+    noSkillsDetected: string;
   };
+  improvements: string[];
   toneAndStyle: {
     score: number;
     tips: {
-      type: "good" | "improve";
+      type: "good" | "warning" | "bad";
       tip: string;
       explanation: string;
     }[];
@@ -34,7 +38,7 @@ interface Feedback {
   content: {
     score: number;
     tips: {
-      type: "good" | "improve";
+      type: "good" | "warning" | "bad";
       tip: string;
       explanation: string;
     }[];
@@ -42,7 +46,7 @@ interface Feedback {
   structure: {
     score: number;
     tips: {
-      type: "good" | "improve";
+      type: "good" | "warning" | "bad";
       tip: string;
       explanation: string;
     }[];
@@ -50,7 +54,7 @@ interface Feedback {
   skills: {
     score: number;
     tips: {
-      type: "good" | "improve";
+      type: "good" | "warning" | "bad";
       tip: string;
       explanation: string;
     }[];

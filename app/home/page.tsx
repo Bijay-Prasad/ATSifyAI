@@ -11,18 +11,21 @@ import { Loader2 } from "lucide-react";
 export default function HomePage() {
   const items = [
     {
+      id: "1",
       title: "Google",
       score: 82,
       role: "Product Manager",
       date: "Sep 2025",
     },
     {
+      id: "2",
       title: "Microsoft",
       score: 67,
       role: "Software Engineer",
       date: "Sep 2025",
     },
     {
+      id: "3",
       title: "Apple",
       score: 54,
       role: "iOS Developer",
@@ -104,6 +107,7 @@ export default function HomePage() {
             resumes.map((it, i) => (
               <ResumeCard
                 key={it.id}
+                id={it.id}
                 title={it.companyName || ""}
                 score={it.feedback.overallScore}
                 role={it.jobTitle || ""}
@@ -111,7 +115,7 @@ export default function HomePage() {
               />
             ))
           ) : (
-            items.map((it, i) => <ResumeCard key={it.title} {...it} />)
+            items.map((it, i) => <ResumeCard key={it.id} {...it} />)
           )}
         </motion.div>
       </section>

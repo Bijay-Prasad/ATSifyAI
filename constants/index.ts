@@ -10,7 +10,11 @@ export const resumes: Resume[] = [
       ATS: {
         score: 90,
         tips: [],
+        keywordRelevance: "",
+        skillsDetected: "",
+        noSkillsDetected: "",
       },
+      improvements: [],
       toneAndStyle: {
         score: 90,
         tips: [],
@@ -40,7 +44,11 @@ export const resumes: Resume[] = [
       ATS: {
         score: 90,
         tips: [],
+        keywordRelevance: "",
+        skillsDetected: "",
+        noSkillsDetected: "",
       },
+      improvements: [],
       toneAndStyle: {
         score: 90,
         tips: [],
@@ -70,7 +78,11 @@ export const resumes: Resume[] = [
       ATS: {
         score: 90,
         tips: [],
+        keywordRelevance: "",
+        skillsDetected: "",
+        noSkillsDetected: "",
       },
+      improvements: [],
       toneAndStyle: {
         score: 90,
         tips: [],
@@ -100,7 +112,11 @@ export const resumes: Resume[] = [
       ATS: {
         score: 90,
         tips: [],
+        keywordRelevance: "",
+        skillsDetected: "",
+        noSkillsDetected: "",
       },
+      improvements: [],
       toneAndStyle: {
         score: 90,
         tips: [],
@@ -130,7 +146,11 @@ export const resumes: Resume[] = [
       ATS: {
         score: 90,
         tips: [],
+        keywordRelevance: "",
+        skillsDetected: "",
+        noSkillsDetected: "",
       },
+      improvements: [],
       toneAndStyle: {
         score: 90,
         tips: [],
@@ -160,7 +180,11 @@ export const resumes: Resume[] = [
       ATS: {
         score: 90,
         tips: [],
+        keywordRelevance: "",
+        skillsDetected: "",
+        noSkillsDetected: "",
       },
+      improvements: [],
       toneAndStyle: {
         score: 90,
         tips: [],
@@ -187,14 +211,18 @@ export const AIResponseFormat = `
       ATS: {
         score: number; //rate based on ATS suitability
         tips: {
-          type: "good" | "improve";
+          type: "good" | "warning" | "bad;
           tip: string; //give 3-4 tips
         }[];
+        keywordRelevance: string; //make it a short seperated by commas
+        skillsDetected: string; //make it a short seperated by commas
+        noSkillsDetected: string; //make it a short seperated by commas
       };
+      improvements: string[]; //give 4-5 improvements a short title for the improvement checklist
       toneAndStyle: {
         score: number; //max 100
         tips: {
-          type: "good" | "improve";
+          type: "good" | "warning" | "bad;
           tip: string; //make it a short "title" for the actual explanation
           explanation: string; //explain in detail here
         }[]; //give 3-4 tips
@@ -202,7 +230,7 @@ export const AIResponseFormat = `
       content: {
         score: number; //max 100
         tips: {
-          type: "good" | "improve";
+          type: "good" | "warning" | "bad;
           tip: string; //make it a short "title" for the actual explanation
           explanation: string; //explain in detail here
         }[]; //give 3-4 tips
@@ -210,7 +238,7 @@ export const AIResponseFormat = `
       structure: {
         score: number; //max 100
         tips: {
-          type: "good" | "improve";
+          type: "good" | "warning" | "bad;
           tip: string; //make it a short "title" for the actual explanation
           explanation: string; //explain in detail here
         }[]; //give 3-4 tips
@@ -218,7 +246,7 @@ export const AIResponseFormat = `
       skills: {
         score: number; //max 100
         tips: {
-          type: "good" | "improve";
+          type: "good" | "warning" | "bad;
           tip: string; //make it a short "title" for the actual explanation
           explanation: string; //explain in detail here
         }[]; //give 3-4 tips

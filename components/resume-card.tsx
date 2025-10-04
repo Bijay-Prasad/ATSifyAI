@@ -5,17 +5,17 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 
 export function ResumeCard({
+  id,
   title,
   score,
   role,
   date,
-  id = "1", // Default ID for demo purposes
 }: {
+  id?: string
   title: string
   score: number
   role: string
   date: string
-  id?: string
 }) {
   const color =
     score >= 80
