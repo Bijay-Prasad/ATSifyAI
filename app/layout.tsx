@@ -12,7 +12,7 @@ import { Suspense } from "react";
 import { PuterInitClient } from "@/components/puter-init-client";
 
 export const metadata: Metadata = {
-  title: "v0 App",
+  title: "ATSify AI",
   description: "Created with v0",
   generator: "v0.app",
 };
