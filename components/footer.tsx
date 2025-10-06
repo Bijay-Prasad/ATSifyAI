@@ -8,19 +8,9 @@ import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 import { IconBrandGithub, IconBrandTwitter } from "@tabler/icons-react";
 
 export function Footer() {
-  // const { isLoading, auth } = usePuterStore();
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const next = searchParams.get("next") || "/";
-
-  // console.log("Footer searchParams:", searchParams);
-  // console.log("Footer nezt:", next);
-
   const pathname = usePathname();
   const router = useRouter();
   const { auth } = usePuterStore();
-
-  // console.log("Footer pathname:", pathname);
 
   const handleAuthClick = async () => {
     if (auth.isAuthenticated) {

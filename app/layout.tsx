@@ -14,8 +14,8 @@ import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "ATSify AI | An AI-powered Resume Analyzer",
-  description: "Created with v0",
-  generator: "v0.app",
+  description: "An AI-powered Resume Analyzer. ATS ko karo beat, interview ki seat!",
+  generator: "Built with Nextjs and Puter by Bijay Prasad",
   icons: {
     icon: "/favicon.svg",
     // Optional: Add other icon sizes and types
