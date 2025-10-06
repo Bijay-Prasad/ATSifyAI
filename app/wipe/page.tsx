@@ -20,7 +20,7 @@ const WipeApp = () => {
 
   useEffect(() => {
     if (!isLoading && !auth.isAuthenticated) {
-        router.push("/auth?next=/wipe");
+      router.push("/auth?next=/wipe");
     }
   }, [isLoading]);
 
@@ -41,7 +41,7 @@ const WipeApp = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center">
       Authenticated as: {auth.user?.username}
       <div>Existing files:</div>
       <div className="flex flex-col gap-4">

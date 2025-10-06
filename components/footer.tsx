@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { usePuterStore } from "@/lib/puter";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
+import { IconBrandGithub, IconBrandTwitter } from "@tabler/icons-react";
 
 export function Footer() {
   // const { isLoading, auth } = usePuterStore();
@@ -19,7 +20,7 @@ export function Footer() {
   const router = useRouter();
   const { auth } = usePuterStore();
 
-  console.log("Footer pathname:", pathname);
+  // console.log("Footer pathname:", pathname);
 
   const handleAuthClick = async () => {
     if (auth.isAuthenticated) {
@@ -140,6 +141,20 @@ export function Footer() {
             </a>
             <a href="#" className="hover:text-foreground transition-colors">
               Support
+            </a>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <a
+              href="https://x.com/Wannabe_01_"
+              className="hover:text-foreground transition-colors"
+            >
+              <IconBrandTwitter />
+            </a>
+            <a
+              href="https://github.com/Bijay-Prasad"
+              className="hover:text-foreground transition-colors"
+            >
+              <IconBrandGithub />
             </a>
           </div>
         </div>

@@ -24,8 +24,9 @@ export function Nav() {
       await auth.signOut();
       router.push("/");
     } else {
-      await auth.signIn();
-      router.push(pathname);
+      // await auth.signIn();
+      // router.push(pathname);
+      pathname == "/auth" ? router.push(`/auth?next=/`) :  router.push(`/auth?next=${pathname}`);
     }
   };
 

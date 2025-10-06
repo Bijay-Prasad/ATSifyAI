@@ -10,12 +10,18 @@ import { AnimatedGradient } from "@/components/animated-gradient";
 import { Footer } from "@/components/footer";
 import { Suspense } from "react";
 import { PuterInitClient } from "@/components/puter-init-client";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "ATSify AI",
+  title: "ATSify AI | An AI-powered Resume Analyzer",
   description: "Created with v0",
   generator: "v0.app",
+  icons: {
+    icon: "/favicon.svg",
+    // Optional: Add other icon sizes and types
+    shortcut: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -23,6 +29,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const puterApiUrl = process.env.NEXT_PUBLIC_PUTER_API_URL;
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
@@ -37,7 +44,7 @@ export default function RootLayout({
             <Nav />
             <PuterInitClient />
             <main className="relative mx-auto max-w-6xl px-4 py-8 md:py-10">
-              <script src="https://js.puter.com/v2/"></script>
+              <script src={puterApiUrl}></script>
               {children}
             </main>
             <Footer />

@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import { ReviewSection } from "@/components/review-section";
 import { ATSCard } from "@/components/ats-card";
 import { Resume } from "@/components/resume";
+import { usePageTitle } from "@/hooks/use-PageTitle";
 
 // Mock data based on the Figma design
 const mockReviewData = {
@@ -207,14 +208,16 @@ export default function ReviewPage() {
   const { auth, isLoading, fs, kv } = usePuterStore();
   const [companyName, setCompanyName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
+  const [resumeDate, setResumeDate] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [resumeUrl, setResumeUrl] = useState("");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [loadingFeedback, setLoadingFeedback] = useState(false);
+  usePageTitle(`ATSify AI - ${jobTitle} Resume Review`);
 
   const params = useParams();
   const id = params.id as string;
-  console.log("Resume Id:", id);
+  // console.log("Resume Id:", id);
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -222,7 +225,7 @@ export default function ReviewPage() {
         setLoadingFeedback(true);
         const resume = await kv.get(`resume:${id}`);
 
-        console.log("resume", resume);
+        // console.log("resume", resume);
 
         if (!resume) {
           setLoadingFeedback(false);
@@ -245,6 +248,7 @@ export default function ReviewPage() {
         }
         setCompanyName(data.companyName);
         setJobTitle(data.jobTitle);
+        setResumeDate(data.resumeDate);
         setFeedback(data.feedback);
         setLoadingFeedback(false);
       };
@@ -288,7 +292,7 @@ export default function ReviewPage() {
       ? "text-amber-600 dark:text-amber-400"
       : "text-red-600 dark:text-red-400";
 
-  console.log({ imageUrl, resumeUrl, feedback });
+  // console.log({ imageUrl, resumeUrl, feedback });
 
   if (loadingFeedback) {
     return (

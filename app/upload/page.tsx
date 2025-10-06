@@ -22,6 +22,7 @@ import { convertPdfToImage } from "@/lib/pdf2img";
 import { generateUUID } from "@/lib/utils";
 import { prepareInstructions } from "@/constants";
 import { MultiStepLoader } from "@/components/ui/multi-step-loader";
+import { usePageTitle } from "@/hooks/use-PageTitle";
 
 
 const loadingStates = [
@@ -34,6 +35,7 @@ const loadingStates = [
 ];
 
 export default function UploadPage() {
+  usePageTitle(`ATSify AI - Upload Resume`);
   const { auth, isLoading, fs, ai, kv } = usePuterStore();
   const router = useRouter();
 
@@ -71,11 +73,13 @@ export default function UploadPage() {
     companyName,
     jobTitle,
     jobDescription,
+    resumeDate,
     file,
   }: {
     companyName: string;
     jobTitle: string;
     jobDescription: string;
+    resumeDate: string;
     file: File;
   }) => {
     setIsProcessing(true);
@@ -103,6 +107,7 @@ export default function UploadPage() {
       companyName,
       jobTitle,
       jobDescription,
+      resumeDate,
       feedback: "",
     };
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
@@ -152,8 +157,15 @@ export default function UploadPage() {
 
     if (!file) return;
 
-    handleAnalyze({ companyName, jobTitle, jobDescription, file });
-    console.log({ companyName, jobTitle, jobDescription, file });
+    const currentDate = new Date();
+    const resumeDate = currentDate.toLocaleString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+    // console.log("Current:", resumeDate);
+
+    handleAnalyze({ companyName, jobTitle, jobDescription, resumeDate, file });
+    // console.log({ companyName, jobTitle, jobDescription, resumeDate, file });
   };
 
   return (

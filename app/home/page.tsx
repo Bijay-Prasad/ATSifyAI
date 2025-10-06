@@ -60,7 +60,7 @@ export default function HomePage() {
     }
   }, [auth.isAuthenticated]);
 
-  console.log({ resumes, loadingResumes });
+  // console.log({ resumes, loadingResumes });
 
   return (
     <div className="space-y-8 md:min-h-[39vh] ">
@@ -113,7 +113,7 @@ export default function HomePage() {
                 title={it.companyName || ""}
                 score={it.feedback.overallScore}
                 role={it.jobTitle || ""}
-                date="Sep 2025"
+                date={it.resumeDate || ""}
               />
             ))
           ) : (

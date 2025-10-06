@@ -218,7 +218,7 @@ export const AIResponseFormat = `
         skillsDetected: string; //make it a short seperated by commas
         noSkillsDetected: string; //make it a short seperated by commas
       };
-      improvements: string[]; //give 4-5 improvements a short title for the improvement checklist
+      improvements: string[]; //give 5-7 improvements a short title for the improvement checklist
       toneAndStyle: {
         score: number; //max 100
         tips: {
