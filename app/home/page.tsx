@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { usePuterStore } from "@/lib/puter";
 import { Loader2 } from "lucide-react";
+import { Meteors } from "@/components/ui/meteors";
 
 export default function HomePage() {
   const items = [
@@ -64,6 +65,7 @@ export default function HomePage() {
   return (
     <div className="space-y-8 md:min-h-[39vh] ">
       <section className="grid items-center gap-6 md:grid-cols-2 ">
+        <Meteors/>
         <div className="space-y-4">
           <motion.h1
             initial={{ opacity: 0, y: 10 }}
@@ -74,9 +76,9 @@ export default function HomePage() {
             Track your AI-powered ATS insights
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
             className="max-w-prose text-pretty text-muted-foreground"
           >
             See previously analyzed resumes, scores, and tips—all in one place.

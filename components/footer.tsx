@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { usePuterStore } from "@/lib/puter";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 
 export function Footer() {
   // const { isLoading, auth } = usePuterStore();
@@ -35,7 +36,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center md:text-left">
             <Link href="/home" className="font-semibold text-pretty">
               <span className="text-foreground">ATSify</span>
               <span className="ml-1 rounded-md bg-primary px-2 py-0.5 text-sm text-primary-foreground">
@@ -49,7 +50,7 @@ export function Footer() {
           </div>
 
           {/* Product */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center md:text-left">
             <h3 className="font-medium text-foreground">Product</h3>
             <ul className="space-y-2 text-sm">
               <li>
@@ -70,7 +71,11 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href={auth.isAuthenticated ? `/auth?next=/` : `/auth?next=${pathname}`}
+                  href={
+                    auth.isAuthenticated
+                      ? `/auth?next=/`
+                      : `/auth?next=${pathname}`
+                  }
                   className="text-muted-foreground hover:text-foreground transition-colors"
                   onClick={handleAuthClick}
                 >
@@ -81,7 +86,7 @@ export function Footer() {
           </div>
 
           {/* Resources */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center md:text-left">
             <h3 className="font-medium text-foreground">Resources</h3>
             <ul className="space-y-2 text-sm">
               <li>
@@ -112,11 +117,15 @@ export function Footer() {
           </div>
 
           {/* Settings */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center md:text-left">
             <h3 className="font-medium text-foreground">Settings</h3>
-            <div className="flex items-center gap-2">
+            <div className="flex justify-center md:justify-start items-center gap-2">
               <span className="text-sm text-muted-foreground">Theme</span>
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
+              <AnimatedThemeToggler
+                duration={500}
+                className="text-foreground/80 hover:text-foreground cursor-pointer"
+              />
             </div>
           </div>
         </div>

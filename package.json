@@ -51,7 +51,7 @@
     "gsap": "latest",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
-    "motion": "latest",
+    "motion": "^12.23.22",
     "next": "14.2.16",
     "next-themes": "latest",
     "pdfjs-dist": "^5.3.93",

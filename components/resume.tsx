@@ -37,7 +37,7 @@ export function Resume({
       </CardHeader>
       <CardContent className="p-0">
         {/* Resume Preview - Using placeholder for now */}
-        <div className="bg-white dark:bg-gray-900 border rounded-lg mx-6 mb-6 p-6 min-h-[600px] shadow-sm">
+        <div className="bg-white dark:bg-gray-900 border rounded-lg mx-6 mb-6 p-6 shadow-sm">
           <div className="space-y-6">
             {imageUrl && resumeUrl && (
               <a href={resumeUrl} target="_blank" rel="noopener noreferrer">

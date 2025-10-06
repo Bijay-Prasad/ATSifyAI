@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { usePuterStore } from "@/lib/puter";
 import { LogIn, LogOut } from "lucide-react";
+import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 
 const links = [
   { href: "/home", label: "Home" },
@@ -57,8 +58,9 @@ export function Nav() {
               <LogIn className="h-5 w-5 cursor-pointer" />
             )}
           </Button>
-          <div className="ml-2">
-            <ThemeToggle />
+          <div className="ml-2 flex justify-between items-center">
+            {/* <ThemeToggle /> */}
+            <AnimatedThemeToggler duration={500} className="text-foreground/80 hover:text-foreground cursor-pointer"/>
           </div>
         </nav>
       </div>

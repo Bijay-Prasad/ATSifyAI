@@ -10,6 +10,7 @@ import { AnimatedGradient } from "@/components/animated-gradient";
 import { Footer } from "@/components/footer";
 import { Suspense } from "react";
 import { PuterInitClient } from "@/components/puter-init-client";
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: "ATSify AI",
@@ -43,6 +44,7 @@ export default function RootLayout({
             <Analytics />
           </Suspense>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
