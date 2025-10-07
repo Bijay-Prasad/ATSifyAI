@@ -41,10 +41,10 @@ ATSify AI is a modern web application that leverages AI to analyze resumes and o
    ```
 
 3. **Configure environment variables:**
-   - Create a `.env` file in the root directory and environment variable:
-     ```
-     NEXT_PUBLIC_PUTER_API_URL
-     ```
+    Create a `.env` file in the root directory and environment variable:
+    ```
+    NEXT_PUBLIC_PUTER_API_URL
+    ```
 
 4. **Run the development server:**
    ```sh
