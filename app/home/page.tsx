@@ -14,9 +14,9 @@ export default function HomePage() {
     {
       id: "1",
       title: "Google",
-      score: 82,
+      score: 91,
       role: "Product Manager",
-      date: "Sep 2025",
+      date: "Aug 2025",
     },
     {
       id: "2",
@@ -28,9 +28,9 @@ export default function HomePage() {
     {
       id: "3",
       title: "Apple",
-      score: 54,
+      score: 47,
       role: "iOS Developer",
-      date: "Aug 2025",
+      date: "Oct 2025",
     },
   ];
 
