@@ -43,7 +43,7 @@ export default function RootLayout({
             <AnimatedGradient />
             <Nav />
             <PuterInitClient />
-            <main className="relative mx-auto max-w-6xl px-4 py-8 md:py-10">
+            <main className="relative mx-auto max-w-6xl px-4 py-8 md:py-10 overflow-hidden">
               <script src={puterApiUrl}></script>
               {children}
             </main>

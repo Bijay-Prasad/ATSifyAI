@@ -52,7 +52,7 @@ export function Nav() {
               {l.label}
             </Link>
           ))}
-          <Button variant="outline" className="ml-2" onClick={handleAuthClick}>
+          <Button variant="outline" className="ml-2 cursor-pointer" onClick={handleAuthClick}>
             {auth.isAuthenticated ? (
               <LogOut className="h-5 w-5 cursor-pointer" />
             ) : (

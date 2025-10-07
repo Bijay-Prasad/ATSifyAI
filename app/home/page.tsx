@@ -60,12 +60,12 @@ export default function HomePage() {
     }
   }, [auth.isAuthenticated]);
 
-  // console.log({ resumes, loadingResumes });
+  console.log({ resumes, loadingResumes });
 
   return (
     <div className="space-y-8 md:min-h-[39vh] ">
-      <section className="grid items-center gap-6 md:grid-cols-2 ">
-        <Meteors/>
+      <section className="grid items-center gap-6 md:grid-cols-2 overflow-x-hidden">
+        <Meteors />
         <div className="space-y-4">
           <motion.h1
             initial={{ opacity: 0, y: 10 }}
@@ -85,12 +85,12 @@ export default function HomePage() {
             Continue improving or start a new upload.
           </motion.p>
           <div className="flex gap-3">
-            <Link href="/upload" className="cursor-pointer">
-              <Button>Upload new resume</Button>
+            <Link href="/upload">
+              <Button className="cursor-pointer">Upload new resume</Button>
             </Link>
             {!auth.isAuthenticated && (
               <Link href="/auth">
-                <Button variant="outline">Sign in</Button>
+                <Button variant="outline" className="cursor-pointer">Sign in</Button>
               </Link>
             )}
           </div>
@@ -106,16 +106,18 @@ export default function HomePage() {
               <Loader2 className="h-4 w-4 animate-spin" />
             </div>
           ) : auth.isAuthenticated && resumes.length > 0 ? (
-            resumes.map((it, i) => (
-              <ResumeCard
-                key={it.id}
-                id={it.id}
-                title={it.companyName || ""}
-                score={it.feedback.overallScore}
-                role={it.jobTitle || ""}
-                date={it.resumeDate || ""}
-              />
-            ))
+            resumes
+              .slice(0, 4)
+              .map((it, i) => (
+                <ResumeCard
+                  key={it.id}
+                  id={it.id}
+                  title={it.companyName || ""}
+                  score={it.feedback.overallScore}
+                  role={it.jobTitle || ""}
+                  date={it.resumeDate || ""}
+                />
+              ))
           ) : (
             items.map((it, i) => <ResumeCard key={it.id} {...it} />)
           )}

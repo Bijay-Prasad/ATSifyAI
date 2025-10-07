@@ -18,9 +18,9 @@ export function ResumeCard({
   date: string
 }) {
   const color =
-    score >= 80
+    score >= 69
       ? "text-green-600 dark:text-green-400"
-      : score >= 60
+      : score >= 49
         ? "text-amber-600 dark:text-amber-400"
         : "text-red-600 dark:text-red-400"
 
